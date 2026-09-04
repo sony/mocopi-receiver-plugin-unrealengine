@@ -25,17 +25,19 @@ REM 2.Add/Modify your UE Versions below
 REM 3.Add/Modify corresponding Engine installation paths
 REM 4.Add/Modify calls to the BuildAndPackage function 
 
-set Plugin_Version=1.0.6
+set Plugin_Version=1.0.7
 
 REM UE versions to package plugin for
 set "UE_V5=5.5"
 set "UE_V6=5.6"
 set "UE_V7=5.7"
+set "UE_V8=5.8"
 
 REM Corresponding Engine paths
 set "UE_V5_Dir=C:\Program Files\Epic Games\UE_%UE_V5%"
 set "UE_V6_Dir=C:\Program Files\Epic Games\UE_%UE_V6%"
 set "UE_V7_Dir=C:\Program Files\Epic Games\UE_%UE_V7%"
+set "UE_V8_Dir=C:\Program Files\Epic Games\UE_%UE_V8%"
 
 REM Output Directory for Packaged builds
 set "Pkg_Output_Dir=C:\mocopi_temp\MocopiLiveLink_Packaging\%Plugin_Version%"
@@ -53,6 +55,7 @@ REM  Comment these out as needed for testing
 call :BuildAndPackage %UE_V5% "%UE_V5_Dir%"
 call :BuildAndPackage %UE_V6% "%UE_V6_Dir%"
 call :BuildAndPackage %UE_V7% "%UE_V7_Dir%"
+call :BuildAndPackage %UE_V8% "%UE_V8_Dir%"
 
 goto :eof
 

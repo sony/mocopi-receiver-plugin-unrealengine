@@ -35,6 +35,8 @@ mocopi Receiver Plugin for Unreal Engine is a plugin for receiving motion data t
 - **Unreal Engine**: Unreal Engine 5.5 or later
 - **Network**: Local network connection between mocopi app and Unreal Engine application
 
+> **Windows packaging support**: `PackagePluginWindows.bat` targets Unreal Engine 5.5, 5.6, 5.7, and 5.8.
+
 ### Runtime Requirements
 - mocopi app (Mobile version: Android/iOS, or PC version: Windows)
 - UDP communication connection between mocopi app and Unreal Engine application
@@ -52,6 +54,8 @@ mocopi Receiver Plugin for Unreal Engine is a plugin for receiving motion data t
 BuildScripts/PackagePluginWindows.bat
 ```
 
+The Windows script packages separate plugin builds for Unreal Engine 5.5 through 5.8.
+
 #### macOS
 ```bash
 chmod +x BuildScripts/PackagePluginMac.sh
@@ -59,6 +63,33 @@ BuildScripts/PackagePluginMac.sh
 ```
 
 This will create a packaged plugin in the output directory.
+
+### Reliability tuning
+
+The mocopi source defaults to the **Smooth** preset: a 120 ms Engine Time offset with a 120-frame Live Link buffer. Packet Timestamp Recovery uses the capture timestamp embedded in each mocopi packet, allowing Live Link to interpolate between the surrounding real poses when intermediate UDP packets are missing. This follows the same timestamp-buffering principle used by Sony's Unity receiver.
+
+| Preset | Offset | Buffer | Purpose |
+| --- | ---: | ---: | --- |
+| **Realtime** | 40 ms | 60 frames | Minimum practical latency for clean networks |
+| **Smooth (Recommended)** | 120 ms | 120 frames | Balanced event and production use |
+| **Reliable** | 200 ms | 160 frames | Maximum resilience for crowded or unstable wireless environments |
+| **Custom** | User-defined | User-defined | Fine-grained manual tuning |
+
+Select the mocopi source in **Window > Virtual Production > Live Link** to adjust:
+
+- **Buffer Size (Frames)** and **Engine Time Offset** for the delay-versus-resilience tradeoff
+- **UDP Receive Buffer Size** and **Connection Timeout** for burst and dropout tolerance
+- **Use Packet Timestamp Recovery** to reconstruct smooth playback timing across short packet-loss gaps
+- **Rotation Smoothing Strength** and **Translation Smoothing Strength** for pose filtering
+- duplicate/out-of-order rejection and live received/lost/rejected frame diagnostics
+
+Higher offsets and smoothing strengths improve stability at the cost of responsiveness. Selecting a preset applies all related reliability values; manually changing a controlled value marks the preset as **Custom**.
+
+#### Network simulation test panel
+
+The **Mocopi Network Simulation** category can intentionally impair motion packets with deterministic random loss, burst loss, jitter, duplicates, and reordering. Skeleton-definition packets are never impaired, and simulation is forced off in Shipping builds.
+
+For a repeatable event-style test, enable simulation and start with seed `1337`, 5% random loss, a three-frame burst every 250 frames, and 50 ms maximum jitter. The diagnostics show intentionally dropped, delayed, and duplicated packets alongside the received/lost/rejected counters. Always disable simulation after testing.
 
 ### Installing to Your Project
 
@@ -113,7 +144,9 @@ To check the samples, please refer to the plugin's Content folder after installa
 **Q: Avatar movement appears jerky**
 - Please check network latency and stability
 - Please verify frame rate settings in the mocopi app
-- Please consider implementing motion smoothing
+- Select the **Reliable** preset for crowded venues or unstable wireless environments
+- For Custom tuning, keep **Use Packet Timestamp Recovery** enabled and increase **Engine Time Offset** in small steps
+- Increase rotation or translation smoothing only as much as needed, because stronger smoothing adds response lag
 
 For additional troubleshooting, please see the [FAQ](https://www.sony.co.jp/en/Products/mocopi-dev/en/documents/ReceiverPlugin/UnrealEngine/TroubleShoot.html).
 

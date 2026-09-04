@@ -19,8 +19,8 @@
 #include "Misc/MessageDialog.h"
 #include "Widgets/SBoxPanel.h"
 #include "Widgets/Text/STextBlock.h"
-#include "Widgets/input/SSegmentedControl.h"
-#include "Widgets/input/SButton.h"
+#include "Widgets/Input/SSegmentedControl.h"
+#include "Widgets/Input/SButton.h"
 
 #include "MocopiMotionFormat.h"
 

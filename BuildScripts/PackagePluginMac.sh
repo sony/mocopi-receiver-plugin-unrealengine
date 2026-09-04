@@ -22,11 +22,13 @@
 UE_Version_5=5.5
 UE_Version_6=5.6
 UE_Version_7=5.7
+UE_Version_8=5.8
 
 # UE Installs directories
 UE_Version5_Dir="/Users/Shared/Epic Games/UE_${UE_Version_5}"
 UE_Version6_Dir="/Users/Shared/Epic Games/UE_${UE_Version_6}"
 UE_Version7_Dir="/Users/Shared/Epic Games/UE_${UE_Version_7}"
+UE_Version8_Dir="/Users/Shared/Epic Games/UE_${UE_Version_8}"
 
 
 # Output Directory for Packaged builds
@@ -34,7 +36,7 @@ UserName="your_username_here"  # <-- Change this to your macOS username
 PkgOutputDir="/Users/${UserName}/Documents/Development/MocopiLiveLink_Packaging/106"
 
 # Plugin Version for Path-naming purposes ONLY. Does NOT modify version number of the plugin.
-PluginVersion=1.0.6
+PluginVersion=1.0.7
 
 # Xcode Paths.
 PathToXcode="/Applications/Xcode.app"
@@ -62,4 +64,5 @@ sudo xcode-select --switch ${PathToXcode}
 BuildPlugin "${UE_Version5_Dir}" "${UE_Version_5}" 
 BuildPlugin "${UE_Version6_Dir}" "${UE_Version_6}"
 BuildPlugin "${UE_Version7_Dir}" "${UE_Version_7}"
+BuildPlugin "${UE_Version8_Dir}" "${UE_Version_8}"
 
